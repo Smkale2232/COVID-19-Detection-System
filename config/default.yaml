@@ -1,0 +1,58 @@
+# Data configuration
+data:
+  image_size: [224, 224]
+  batch_size: 16
+  num_workers: 4
+  train_val_test_split: [0.7, 0.15, 0.15]
+  num_folds: 5
+
+# Model configuration
+model:
+  backbone: "densenet121" # Options: densenet121, resnet50, efficientnet_b0
+  pretrained: true
+  num_classes: 3
+  dropout_rate: 0.5
+
+# Training configuration
+training:
+  epochs: 30
+  learning_rate: 1e-4
+  weight_decay: 1e-4
+  optimizer: "AdamW"
+  scheduler: "CosineAnnealing"
+  early_stopping_patience: 10
+
+# Loss function
+loss:
+  name: "cross_entropy"
+  class_weights: "auto" # auto, balanced, or manual weights
+
+# Data augmentation
+augmentation:
+  rotation_range: 10
+  translate: [0.1, 0.1]
+  scale_range: [0.9, 1.1]
+  brightness: 0.2
+  contrast: 0.2
+  # Note: No horizontal flip for medical images
+
+# Ensemble configuration
+ensemble:
+  method: "soft_voting"
+  models:
+    - backbone: "densenet121"
+    - backbone: "resnet50"
+    - backbone: "efficientnet_b0"
+
+# Evaluation
+evaluation:
+  metrics: ["accuracy", "recall", "precision", "f1", "auc"]
+  confidence_threshold: 0.75
+  uncertainty_threshold: 0.3
+
+# Paths
+paths:
+  data_dir: "./data"
+  output_dir: "./outputs"
+  model_dir: "./models/saved"
+  log_dir: "./logs"

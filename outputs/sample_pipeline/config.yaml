@@ -1,0 +1,60 @@
+augmentation:
+  brightness: 0.2
+  contrast: 0.2
+  rotation_range: 10
+  scale_range:
+  - 0.9
+  - 1.1
+  translate:
+  - 0.1
+  - 0.1
+data:
+  batch_size: 16
+  classes:
+  - COVID-19
+  - Viral Pneumonia
+  - Normal
+  image_size:
+  - 224
+  - 224
+  num_folds: 5
+  num_workers: 4
+  train_val_test_split:
+  - 0.7
+  - 0.15
+  - 0.15
+ensemble:
+  method: soft_voting
+  models:
+  - backbone: densenet121
+  - backbone: resnet50
+  - backbone: resnet34
+evaluation:
+  confidence_threshold: 0.75
+  metrics:
+  - accuracy
+  - recall
+  - precision
+  - f1
+  - auc
+  uncertainty_threshold: 0.3
+loss:
+  class_weights: auto
+  name: cross_entropy
+model:
+  backbone: densenet121
+  dropout_rate: 0.5
+  num_classes: 3
+  pretrained: true
+paths:
+  data_dir: ./data
+  log_dir: outputs/sample_pipeline\logs
+  model_dir: outputs/sample_pipeline\models
+  output_dir: outputs/sample_pipeline
+training:
+  early_stopping_patience: 10
+  epochs: 30
+  learning_rate: 1e-4
+  optimizer: AdamW
+  scheduler: CosineAnnealing
+  weight_decay: 1e-4
